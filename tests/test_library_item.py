@@ -1,60 +1,64 @@
 """
-Description: Unit tests for the Book class.
-Usage: To execute all tests in the terminal execute 
-the following command:
-    python -m unittest tests/test_book.py
+Description: A class to manage LibraryItem objects.
+Author: Anannya
 
-"""
-__author__ = "Anannya"
-__version__ = "1.0"
-
-"""
-Unit tests for the LibraryItem class.
-Run in terminal using:
-    python -m unittest tests/test_library_item.py
+Version: 1.0.0
 """
 
-import unittest
-from library_item.library_item import LibraryItem
 from genre.genre import Genre
 
 
-class TestLibraryItem(unittest.TestCase):
+class LibraryItem:
+    """This class represents a library item like a book or DVD."""
 
-    def test_blank_title_raises_exception(self):
-        """Check if a blank title raises ValueError"""
-        with self.assertRaises(ValueError):
-            LibraryItem(1, "", "Author", Genre.FICTION, False)
+    def __init__(self, item_id, title, author, genre, is_borrowed=False):
+        # Validate item_id (must be an integer)
+        if not isinstance(item_id, int):
+            raise ValueError("Item Id must be numeric.")
+        self.__item_id = item_id
 
-    def test_blank_author_raises_exception(self):
-        """Check if a blank author raises ValueError"""
-        with self.assertRaises(ValueError):
-            LibraryItem(1, "Book Title", "", Genre.FICTION, False)
+        # Validate title (cannot be blank)
+        if not title.strip():
+            raise ValueError("Title cannot be blank.")
+        self.__title = title.strip()
 
-    def test_invalid_genre_raises_exception(self):
-        """Check if invalid genre raises ValueError"""
-        with self.assertRaises(ValueError):
-            LibraryItem(1, "Book Title", "Author", 123, False)
+        # Validate author (cannot be blank)
+        if not author.strip():
+            raise ValueError("Author cannot be blank.")
+        self.__author = author.strip()
 
-    def test_item_id_not_integer_raises_exception(self):
-        """Check if item_id is not an integer"""
-        with self.assertRaises(ValueError):
-            LibraryItem("one", "Book Title", "Author", Genre.FICTION, False)
+        # Validate genre (must be a Genre enum)
+        if not isinstance(genre, Genre):
+            raise ValueError("Invalid Genre.")
+        self.__genre = genre
 
-    def test_is_borrowed_not_boolean_raises_exception(self):
-        """Check if is_borrowed is not a boolean"""
-        with self.assertRaises(ValueError):
-            LibraryItem(1, "Book Title", "Author", Genre.FICTION, "yes")
+        # Validate is_borrowed (must be a boolean)
+        if not isinstance(is_borrowed, bool):
+            raise ValueError("Is Borrowed must be a boolean value.")
+        self.__is_borrowed = is_borrowed
 
-    def test_valid_data_sets_attributes(self):
-        """Check if valid input correctly sets attributes"""
-        item = LibraryItem(1, "Book Title", "John", Genre.FICTION, False)
-        self.assertEqual(item.item_id, 1)
-        self.assertEqual(item.title, "Book Title")
-        self.assertEqual(item.author, "John")
-        self.assertEqual(item.genre, Genre.FICTION)
-        self.assertFalse(item.is_borrowed)
+    # Accessors / Getters
+    @property
+    def item_id(self):
+        """Return the item id."""
+        return self.__item_id
 
+    @property
+    def title(self):
+        """Return the title."""
+        return self.__title
 
-if __name__ == "__main__":
-    unittest.main()
+    @property
+    def author(self):
+        """Return the author."""
+        return self.__author
+
+    @property
+    def genre(self):
+        """Return the genre."""
+        return self.__genre
+
+    @property
+    def is_borrowed(self):
+        """Return True if borrowed, False if available."""
+        return self.__is_borrowed
